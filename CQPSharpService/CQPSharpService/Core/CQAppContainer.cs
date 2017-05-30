@@ -9,6 +9,7 @@ namespace CQPSharpService.Core {
 
     public class CQAppContainer {
 
+        private NLog.Logger nLogger = NLog.LogManager.GetCurrentClassLogger();
 
         private List<CQAppAbstract> _apps;
 
@@ -57,6 +58,7 @@ namespace CQPSharpService.Core {
                                         instance1.Name = "[*]" + instance1.Name;
                                     else
                                         instance1.Startup();
+
                                 }
                             }
                         } catch {
