@@ -46,10 +46,20 @@ namespace CQPSharpService.KancolleBot {
             await Task.Run(() => {
                 m_cwsStandard = new StandardTokenizer(new FileStream(Path.Combine(AppDataPath, @"CWSharp\default.dawg"), FileMode.Open, FileAccess.Read));
                 m_cwsStopWord = new StopwordTokenizer(m_cwsStandard, File.ReadAllLines(Path.Combine(AppDataPath, @"CWSharp\default.stopwords")));
+                KCBManager.nLog.Info("CWS initialized.");
             });
-            await Task.Run(() => { RandomOrgClient = new RandomJsonRPCClient(KCBManager.Instance.RandomOrgToken); });
-            await Task.Run(() => { m_modTwitterNotifier = new TwitterNotifier(); });
-            await Task.Run(() => { m_modKCUpdateNotifier = new KCUpdateNotifier(); });
+            await Task.Run(() => {
+                RandomOrgClient = new RandomJsonRPCClient(KCBManager.Instance.RandomOrgToken);
+                KCBManager.nLog.Info("RandomOrgClient initialized.");
+            });
+            await Task.Run(() => {
+                m_modTwitterNotifier = new TwitterNotifier();
+                KCBManager.nLog.Info("Module: TwitterNotifier initialized.");
+            });
+            await Task.Run(() => {
+                m_modKCUpdateNotifier = new KCUpdateNotifier();
+                KCBManager.nLog.Info("Module: KCUpdateNotifie initialized.");
+            });
             IsInit = true;
         }
 

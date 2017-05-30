@@ -80,7 +80,7 @@ namespace CQPSharpService.KancolleBot.Modules {
         private async Task CheckSlotItemAsync(int slotItemId) {
             var slotItemIdStr = slotItemId.ToString("D3");
             using (HttpClient client = new HttpClient()) {
-                var rndSrvAddr = KCBManager.SERVER_ADDRESS[KCBManager.RANDOM.Next(KCBManager.SERVER_ADDRESS.Count)];
+                var rndSrvAddr = KCBManager.SERVER_ADDRESS[KCBManager.Rnd.Next(KCBManager.SERVER_ADDRESS.Count)];
                 var slotItemFolder = Path.Combine(SLOT_ITEM_PATH, slotItemIdStr);
                 var combinedName = string.Format("{0}_combined.png", slotItemIdStr);
                 if (!Directory.Exists(slotItemFolder) || !File.Exists(Path.Combine(slotItemFolder, combinedName))) {
@@ -109,7 +109,6 @@ namespace CQPSharpService.KancolleBot.Modules {
                         CombineImages(slotItemFolder, combinedPath);
                         var updateMsg = string.Format("镇守府开发出了新装备哦~！\n编号：{0}\n{1}", slotItemIdStr, KCBManager.Instance.GetCoolQImageCode(combinedPath));
                         KCBManager.Instance.BroadcastToGroup(updateMsg);
-                        KCBManager.Instance.AdminLog(updateMsg, true);
                     }
                 }
             }
@@ -151,7 +150,6 @@ namespace CQPSharpService.KancolleBot.Modules {
 
             }
         }
-
 
         private const int MAX_CHECK_TIME = 150000;
         private string MODULE_PATH => KCBManager.Instance.AppDataPath + @"\KCUpdateNotifier";

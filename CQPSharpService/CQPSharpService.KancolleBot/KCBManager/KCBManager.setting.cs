@@ -5,13 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 
 namespace CQPSharpService.KancolleBot {
     public sealed partial class KCBManager {
         private KCBConfig m_config;
         private Timer m_cacheTimer;
 
-        internal static readonly Random RANDOM = new Random();
+        internal static readonly Random Rnd = new Random();
+
+        public static Logger nLog = LogManager.GetLogger("CQPSharpService.KancolleBot");
+
         public string AppDataPath;
         public string CQAppPath { get; private set; }
         public string CQRootPath => Directory.GetParent(Directory.GetParent(Directory.GetParent(CQAppPath).FullName).FullName).FullName;

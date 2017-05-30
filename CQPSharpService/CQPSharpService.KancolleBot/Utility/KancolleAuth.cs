@@ -62,7 +62,7 @@ namespace CQPSharpService.KancolleBot.Utility {
                 return new Tuple<string, string>(dmm_token["DMM_TOKEN"], token["token"]);
 
             } catch (Exception e) {
-                KCBManager.Instance.AdminLog("Exception on GetDMMTokensAjax failed." + e.Message);
+                KCBManager.nLog.Error(e, "Exception on GetDMMTokensAjax failed.");
                 throw;
             }
         }
@@ -82,7 +82,7 @@ namespace CQPSharpService.KancolleBot.Utility {
                 var ajaxTokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonResult);
                 return new Tuple<string, string, string>(ajaxTokens["token"], ajaxTokens["login_id"], ajaxTokens["password"]);
             } catch (Exception e) {
-                KCBManager.Instance.AdminLog("Exception on GetAjaxTokens failed. " + e.Message, true);
+                KCBManager.nLog.Error(e, "Exception on GetAjaxTokens failed. ");
                 throw;
             }
         }
@@ -119,7 +119,7 @@ namespace CQPSharpService.KancolleBot.Utility {
                 return osapiUrl;
 
             } catch (Exception e) {
-                KCBManager.Instance.AdminLog("Exception on GetOSAPIUrl failed. " + e.Message, true);
+                KCBManager.nLog.Error(e, "Exception on GetOSAPIUrl failed. ");
                 throw;
             }
         }
@@ -186,7 +186,7 @@ namespace CQPSharpService.KancolleBot.Utility {
 
                 return new Tuple<int, string, string>(worldId, worldIP, apiToken);
             } catch (Exception e) {
-                KCBManager.Instance.AdminLog("Exception on GetOSAPIUrl failed. " + e.Message, true);
+                KCBManager.nLog.Error(e, "Exception on GetOSAPIUrl failed. " + e.Message);
                 throw;
             }
         }

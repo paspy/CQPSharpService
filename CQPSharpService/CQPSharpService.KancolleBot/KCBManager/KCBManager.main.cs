@@ -16,6 +16,7 @@ using CQPSharpService.Utility;
 using CQPSharpService.KancolleBot.Utility;
 
 namespace CQPSharpService.KancolleBot {
+
     public sealed partial class KCBManager {
 
         public void Init(string dataPath) {
@@ -52,7 +53,7 @@ namespace CQPSharpService.KancolleBot {
                 m_cacheTimer = new Timer(UpdateGroupInfo, null, 1000, Timeout.Infinite);
 
             } catch (Exception e) {
-                AdminLog(e.Message, true);
+                nLog.Error(e, e.Message);
                 throw;
             }
         }
@@ -64,7 +65,7 @@ namespace CQPSharpService.KancolleBot {
                     var bcLst = col.Find(Query.EQ("InclBroadcasting", true)).ToList();
                     foreach (var g in bcLst) {
                         CQ.SendGroupMessage(g.GroupNumber, msg + "\n[自动群发]");
-                        Thread.Sleep(100);
+                        Thread.Sleep(50);
                         //CQ.SendPrivateMessage(SuperAdminQQ, msg + "\n[自动群发]");
                         Debug.WriteLine(DateTime.Now + " | " + msg);
                     }
@@ -97,9 +98,12 @@ namespace CQPSharpService.KancolleBot {
         }
 
         public void AdminLog(string msg, bool notifySuperAdmin = false) {
-            Debug.WriteLine(msg);
-            if (notifySuperAdmin)
+            if (notifySuperAdmin) {
+                nLog.Warn(msg);
                 CQ.SendPrivateMessage(SuperAdminQQ, msg);
+            } else {
+                nLog.Info(msg);
+            }
         }
 
         private void UpdateGroupInfo(object target) {
