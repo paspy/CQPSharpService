@@ -66,15 +66,15 @@ namespace CQPSharpService.Core {
             ServerPoint = new IPEndPoint(address, srvPort);
             RemotePoint = new IPEndPoint(address, srvPort);
             RunningFlag = true;
-            CQAppContainer.GetInstance();
             new Thread(new ThreadStart(ReceiveMessage)) {
                 IsBackground = true
             }.Start();
 
             // send initial hello message
-            keepConnectTimer = new Timer(SendHelloMessage, null, 50, Timeout.Infinite);
+            keepConnectTimer = new Timer(SendHelloMessage, null, 5, Timeout.Infinite);
+            CQAppContainer.GetInstance();
         }
-        
+
         private void ReceiveMessage() {
             byte[] numArray = new byte[FrameSize];
             while (RunningFlag) {
@@ -114,7 +114,7 @@ namespace CQPSharpService.Core {
                 Thread.Sleep(200);
             }
         }
-        
+
         private void AnalyzeMessage(object rawData) {
             CQMessageAnalysis.Analyze(rawData.ToString());
         }
@@ -133,12 +133,12 @@ namespace CQPSharpService.Core {
             }
             keepConnectTimer.Change(ClientTimeout * 1000, Timeout.Infinite);
         }
-        
+
         internal void SendMessage(string message) {
             byte[] bytes = Encoding.ASCII.GetBytes(message);
             mySocket.SendTo(bytes, bytes.Length, SocketFlags.None, ServerPoint);
         }
-        
+
         internal string GetStringMessage(string message) {
             byte[] bytes = Encoding.Default.GetBytes(message);
             mySocket.SendTo(bytes, bytes.Length, SocketFlags.None, ServerPoint);

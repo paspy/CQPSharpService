@@ -262,6 +262,22 @@ namespace CQPSharpService.Utility {
             return s;
         }
 
+        /// <summary>获取图像信息</summary>
+        /// <param name="url">Url地址</param>
+        /// <returns>Image对象</returns>
+        public static Image GetImage(string url) {
+            Image image = null;
+            try {
+                Stream stream = GetImageStream(url);
+                image = Image.FromStream(stream);
+                stream.Close();
+            } catch (Exception e) {
+
+                throw e;
+            }
+            return image;
+        }
+
         /// <summary>Url编码数据。</summary>
         /// <param name="data">要编码的数据。</param>
         /// <returns>编码后的数据</returns>

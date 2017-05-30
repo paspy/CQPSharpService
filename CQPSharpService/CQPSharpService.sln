@@ -5,7 +5,13 @@ VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQPSharpService", "CQPSharpService\CQPSharpService.csproj", "{6689343B-7ED1-423D-BEF4-C3F90CB5BA23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQPSharpService.Demo", "CQPSharpService.Demo\CQPSharpService.Demo.csproj", "{7D4BFD8D-3D02-47AE-B0B4-95BCABBAB3A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQPSharpService.KancolleBot", "CQPSharpService.KancolleBot\CQPSharpService.KancolleBot.csproj", "{7D4BFD8D-3D02-47AE-B0B4-95BCABBAB3A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{EC93B7CD-ED9D-4EBC-BC18-5318C4C9232B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomOrgSharp", "External\RandomOrgSharp\RandomOrgSharp.csproj", "{077839A7-283D-4A9C-AB02-FDBEABB30B69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tweetinvi", "External\Tweetinvi\Tweetinvi.csproj", "{6B224380-A5A5-4A6D-96B2-D3DAAD609D8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +27,20 @@ Global
 		{7D4BFD8D-3D02-47AE-B0B4-95BCABBAB3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D4BFD8D-3D02-47AE-B0B4-95BCABBAB3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D4BFD8D-3D02-47AE-B0B4-95BCABBAB3A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{077839A7-283D-4A9C-AB02-FDBEABB30B69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{077839A7-283D-4A9C-AB02-FDBEABB30B69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{077839A7-283D-4A9C-AB02-FDBEABB30B69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{077839A7-283D-4A9C-AB02-FDBEABB30B69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B224380-A5A5-4A6D-96B2-D3DAAD609D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B224380-A5A5-4A6D-96B2-D3DAAD609D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B224380-A5A5-4A6D-96B2-D3DAAD609D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B224380-A5A5-4A6D-96B2-D3DAAD609D8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{077839A7-283D-4A9C-AB02-FDBEABB30B69} = {EC93B7CD-ED9D-4EBC-BC18-5318C4C9232B}
+		{6B224380-A5A5-4A6D-96B2-D3DAAD609D8D} = {EC93B7CD-ED9D-4EBC-BC18-5318C4C9232B}
 	EndGlobalSection
 EndGlobal
