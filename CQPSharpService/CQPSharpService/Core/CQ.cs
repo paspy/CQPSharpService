@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using CQPSharpService.Utility;
+using NLog;
 
 namespace CQPSharpService.Core {
-    /// <summary>封装酷Q提供的基本方法静态类。</summary>
-    public static class CQ {
-        /// <summary>声明对象多线程同步访问锁引用。</summary>
-        [NonSerialized]
-        private static object _syncRoot = null;
 
-        static CQ() {
-            _syncRoot = new object();
-        }
+    public static class CQ {
+
+        private static object _syncRoot = new object();
+        private static Logger nLogger = LogManager.GetCurrentClassLogger();
 
         #region CoolQ Code
 
@@ -90,7 +87,7 @@ namespace CQPSharpService.Core {
         /// <param name="qqNumber">QQ号码。</param>
         /// <param name="message">私聊消息内容。</param>
         public static void SendPrivateMessage(long qqNumber, string message) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][私聊] QQ：{0} {1}", qqNumber, message));
+            nLogger.Info(string.Format("[↑][私聊] QQ：{0} {1}", qqNumber, message));
             CQUDPProxy.GetInstance().SendMessage(string.Format("PrivateMessage {0} {1}", qqNumber, Convert.ToBase64String(Encoding.Default.GetBytes(message))));
         }
 
@@ -98,7 +95,7 @@ namespace CQPSharpService.Core {
         /// <param name="groupNumber">群号码。</param>
         /// <param name="message">群消息内容。</param>
         public static void SendGroupMessage(long groupNumber, string message) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][群聊] 群：{0} {1}", groupNumber, message));
+            nLogger.Info(string.Format("[↑][群聊] 群：{0} {1}", groupNumber, message));
             CQUDPProxy.GetInstance().SendMessage(string.Format("GroupMessage {0} {1}", groupNumber, Convert.ToBase64String(Encoding.Default.GetBytes(message))));
         }
 
@@ -106,7 +103,7 @@ namespace CQPSharpService.Core {
         /// <param name="discussNumber">讨论组号码。</param>
         /// <param name="message">论组消息内容。</param>
         public static void SendDiscussMessage(long discussNumber, string message) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][讨论] QQ：{0} {1}", discussNumber, message));
+            nLogger.Info(string.Format("[↑][讨论] QQ：{0} {1}", discussNumber, message));
             CQUDPProxy.GetInstance().SendMessage(string.Format("DiscussMessage {0} {1}", discussNumber, Convert.ToBase64String(Encoding.Default.GetBytes(message))));
         }
 
@@ -114,7 +111,7 @@ namespace CQPSharpService.Core {
         /// <param name="qqNumber">被操作的QQ。</param>
         /// <param name="times">次数，谨慎增加次数</param>
         public static void SendLike(long qqNumber, long times = 1) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][发赞] QQ：{0} 次数：{1}", qqNumber, times));
+            nLogger.Info(string.Format("[↑][发赞] QQ：{0} 次数：{1}", qqNumber, times));
             CQUDPProxy.GetInstance().SendMessage(string.Format("Like {0} {1}", qqNumber, times));
         }
         #endregion
@@ -125,7 +122,7 @@ namespace CQPSharpService.Core {
         /// <param name="qqNumber">被操作的QQ号码。</param>
         /// <param name="refuse">是否拒绝再次加群。</param>
         public static void SetGroupMemberRemove(long groupNumber, long qqNumber, bool refuse = false) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][踢人] 群：{0} QQ：{1} 拒绝再申请：{2}", groupNumber, qqNumber, refuse ? "是" : "否"));
+            nLogger.Info(string.Format("[↑][踢人] 群：{0} QQ：{1} 拒绝再申请：{2}", groupNumber, qqNumber, refuse ? "是" : "否"));
             CQUDPProxy.GetInstance().SendMessage(string.Format("GroupKick {0} {1} {2}", groupNumber, qqNumber, refuse ? 1 : 0));
         }
 
@@ -134,7 +131,7 @@ namespace CQPSharpService.Core {
         /// <param name="qqNumber">被操作的QQ号码。</param>
         /// <param name="time">禁言时长（以秒为单位)</param>
         public static void SetGroupMemberBan(long groupNumber, long qqNumber, long time) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][禁言] 群：{0} QQ：{1} 时间：{2} 秒", groupNumber, qqNumber, time));
+            nLogger.Info(string.Format("[↑][禁言] 群：{0} QQ：{1} 时间：{2} 秒", groupNumber, qqNumber, time));
             CQUDPProxy.GetInstance().SendMessage(string.Format("GroupBan {0} {1} {2}", groupNumber, qqNumber, time));
         }
 
@@ -143,7 +140,7 @@ namespace CQPSharpService.Core {
         /// <param name="qqNumber">被操作的QQ号码。</param>
         /// <param name="admin">是否设置为管理员。</param>
         public static void SetGroupAdministrator(long groupNumber, long qqNumber, bool admin) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][管理] 群：{0} QQ：{1}", groupNumber, qqNumber, admin ? "提升为管理员" : "降为群员"));
+            nLogger.Info(string.Format("[↑][管理] 群：{0} QQ：{1}", groupNumber, qqNumber, admin ? "提升为管理员" : "降为群员"));
             CQUDPProxy.GetInstance().SendMessage(string.Format("GroupAdmin {0} {1} {2}", groupNumber, qqNumber, admin ? 1 : 0));
         }
 
@@ -151,7 +148,7 @@ namespace CQPSharpService.Core {
         /// <param name="groupNumber">群号码。</param>
         /// <param name="gag">设置或关闭全群禁言。</param>
         public static void SetGroupWholeBan(long groupNumber, bool enable) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][禁言] 群：{0} QQ：{1}", groupNumber, enable ? "全员禁言" : "取消全员禁言"));
+            nLogger.Info(string.Format("[↑][禁言] 群：{0} QQ：{1}", groupNumber, enable ? "全员禁言" : "取消全员禁言"));
             CQUDPProxy.GetInstance().SendMessage(string.Format("GroupWholeBan {0} {1}", groupNumber, enable ? 1 : 0));
         }
 
@@ -160,7 +157,7 @@ namespace CQPSharpService.Core {
         /// <param name="anomymous">被操作的匿名成员名称。</param>
         /// <param name="time">禁言时长（以秒为单位)</param>
         public static void SetGroupAnonymousMemberBan(long groupNumber, string anomymous, long time) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][禁言] 群：{0} 匿名：{1} 时长：{2}", groupNumber, anomymous, time));
+            nLogger.Info(string.Format("[↑][禁言] 群：{0} 匿名：{1} 时长：{2}", groupNumber, anomymous, time));
             CQUDPProxy.GetInstance().SendMessage(
                 string.Format("GroupAnonymousBan {0} {1} {2}", groupNumber, Convert.ToBase64String(Encoding.Default.GetBytes(anomymous)), time));
         }
@@ -169,7 +166,7 @@ namespace CQPSharpService.Core {
         /// <param name="groupNumber">群号码。</param>
         /// <param name="allow">开启或关闭匿名功能。</param>
         public static void SetGroupAllowAnonymous(long groupNumber, bool enable) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][禁言] 群：{0} QQ：{1}", groupNumber, enable ? "开启匿名" : "关闭匿名"));
+            nLogger.Info(string.Format("[↑][禁言] 群：{0} QQ：{1}", groupNumber, enable ? "开启匿名" : "关闭匿名"));
             CQUDPProxy.GetInstance().SendMessage(string.Format("GroupAnonymous {0} {1}", groupNumber, enable ? 1 : 0));
         }
 
@@ -178,7 +175,7 @@ namespace CQPSharpService.Core {
         /// <param name="qqNumber">被操作的QQ号码。</param>
         /// <param name="newName">新的群名称。</param>
         public static void SetGroupNickName(long groupNumber, long qqNumber, string newName) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][名片] 群：{0} QQ：{1} {2}", groupNumber, qqNumber, newName));
+            nLogger.Info(string.Format("[↑][名片] 群：{0} QQ：{1} {2}", groupNumber, qqNumber, newName));
             CQUDPProxy.GetInstance().SendMessage(string.Format("GroupCard {0} {1} {2}", groupNumber, qqNumber, Convert.ToBase64String(Encoding.Default.GetBytes(newName))));
         }
 
@@ -186,7 +183,7 @@ namespace CQPSharpService.Core {
         /// <param name="groupNumber">群号码。</param>
         /// <param name="isdismiss">是否解散。</param>
         public static void SetGroupLeave(long groupNumber, bool isDismiss = false) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][退群] 群：{0} {1}", groupNumber, isDismiss ? "[解散]" : ""));
+            nLogger.Info(string.Format("[↑][退群] 群：{0} {1}", groupNumber, isDismiss ? "[解散]" : ""));
             CQUDPProxy.GetInstance().SendMessage(string.Format("GroupLeave {0} {1}", groupNumber, isDismiss ? 0 : 1));
         }
 
@@ -196,7 +193,7 @@ namespace CQPSharpService.Core {
         /// <param name="newName">头衔名称。</param>
         /// <param name="time">过期时间（以秒为单位）。</param>
         public static void SetGroupSpecialTitle(long groupNumber, long qqNumber, string newTitle, long duration) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][头衔] 群：{0} QQ：{1} {2} 时间：{3}", groupNumber, qqNumber, newTitle, duration));
+            nLogger.Info(string.Format("[↑][头衔] 群：{0} QQ：{1} {2} 时间：{3}", groupNumber, qqNumber, newTitle, duration));
             CQUDPProxy.GetInstance().SendMessage(
                 string.Format("GroupSpecialTitle {0} {1} {2} {3}", groupNumber, qqNumber, Convert.ToBase64String(Encoding.Default.GetBytes(newTitle)), duration));
         }
@@ -204,7 +201,7 @@ namespace CQPSharpService.Core {
         /// <summary>置讨论组退出。</summary>
         /// <param name="discussNumber">讨论组号码。</param>
         public static void SetDiscussLeave(long discussNumber) {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][退组] 组：{0}", discussNumber));
+            nLogger.Info(string.Format("[↑][退组] 组：{0}", discussNumber));
             CQUDPProxy.GetInstance().SendMessage(string.Format("DiscussLeave {0}", discussNumber));
         }
 
@@ -213,7 +210,7 @@ namespace CQPSharpService.Core {
         /// <param name="reactType">反馈类型。</param>
         /// <param name="description">备注。</param>
         public static void SetFriendAddRequest(string react, CQReactType reactType, string description = "") {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][请友] {0} {1} {2}", react, reactType, description));
+            nLogger.Info(string.Format("[↑][请友] {0} {1} {2}", react, reactType, description));
             CQUDPProxy.GetInstance().SendMessage(
                 string.Format("FriendAddRequest {0} {1} {2}",
                 Convert.ToBase64String(Encoding.Default.GetBytes(react)),
@@ -227,7 +224,7 @@ namespace CQPSharpService.Core {
         /// <param name="reactType">反馈类型。</param>
         /// <param name="reason">加群原因。</param>
         public static void SetGroupAddRequest(string react, CQRequestType requestType, CQReactType reactType, string reason = "") {
-            CQLogger.GetInstance().AddLog(string.Format("[↑][请群] {0} {1} {2} {3}", react, requestType, reactType, reason));
+            nLogger.Info(string.Format("[↑][请群] {0} {1} {2} {3}", react, requestType, reactType, reason));
             CQUDPProxy.GetInstance().SendMessage(
                 string.Format("GroupAddRequest {0} {1} {2} {3}",
                 Convert.ToBase64String(Encoding.Default.GetBytes(react)),
@@ -241,16 +238,15 @@ namespace CQPSharpService.Core {
         /// <summary>取登录QQ。</summary>
         /// <returns>登录的QQ号码</returns>
         public static long GetLoginQQ() {
-
             try {
                 lock (_syncRoot) {
-                    CQLogger.GetInstance().AddLog(string.Format("[↑][帐号] 取登录QQ"));
+                    nLogger.Info(string.Format("[↑][帐号] 取登录QQ"));
                     var qq = Convert.ToInt64(CQUDPProxy.GetInstance().GetStringMessage(string.Format("LoginQQ")));
-                    CQLogger.GetInstance().AddLog(string.Format("[↓][帐号] 登录QQ: {0}", qq));
+                    nLogger.Info(string.Format("[↓][帐号] 登录QQ: {0}", qq));
                     return qq;
                 }
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog(string.Format("[X][帐号] 异常: {0}", e.Message));
+                nLogger.Error(e, string.Format("[X][帐号] 异常: {0}", e.Message));
             }
             return 0;
         }
@@ -260,13 +256,13 @@ namespace CQPSharpService.Core {
         public static string GetLoginName() {
             try {
                 lock (_syncRoot) {
-                    CQLogger.GetInstance().AddLog(string.Format("[↑][帐号] 取登录昵称"));
+                    nLogger.Info(string.Format("[↑][帐号] 取登录昵称"));
                     var nickname = Encoding.Default.GetString(Convert.FromBase64String(CQUDPProxy.GetInstance().GetStringMessage(string.Format("LoginNick"))));
-                    CQLogger.GetInstance().AddLog(string.Format("[↓][帐号] 登录昵称: {0}", nickname));
+                    nLogger.Info(string.Format("[↓][帐号] 登录昵称: {0}", nickname));
                     return nickname;
                 }
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog(string.Format("[X][帐号] 异常: {0}", e.Message));
+                nLogger.Error(e, string.Format("[X][帐号] 异常: {0}", e.Message));
             }
             return string.Empty;
         }
@@ -276,13 +272,13 @@ namespace CQPSharpService.Core {
         public static string GetCookies() {
             try {
                 lock (_syncRoot) {
-                    CQLogger.GetInstance().AddLog(string.Format("[↑][帐号] 取Cookies"));
+                    nLogger.Info(string.Format("[↑][帐号] 取Cookies"));
                     var cookie = Encoding.Default.GetString(Convert.FromBase64String(CQUDPProxy.GetInstance().GetStringMessage(string.Format("Cookies"))));
-                    CQLogger.GetInstance().AddLog(string.Format("[↑][帐号] Cookies: {0}", cookie));
+                    nLogger.Info(string.Format("[↑][帐号] Cookies: {0}", cookie));
                     return cookie;
                 }
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog(string.Format("[X][帐号] 异常: {0}", e.Message));
+                nLogger.Error(e, string.Format("[X][帐号] 异常: {0}", e.Message));
             }
             return string.Empty;
         }
@@ -292,13 +288,13 @@ namespace CQPSharpService.Core {
         public static int GetCsrfToken() {
             try {
                 lock (_syncRoot) {
-                    CQLogger.GetInstance().AddLog(string.Format("[↑][帐号] 取CsrfToken"));
+                    nLogger.Info(string.Format("[↑][帐号] 取CsrfToken"));
                     var token = Convert.ToInt32(CQUDPProxy.GetInstance().GetStringMessage(string.Format("CsrfToken")));
-                    CQLogger.GetInstance().AddLog(string.Format("[↓][帐号] CsrfToken: {0}", token));
+                    nLogger.Info(string.Format("[↓][帐号] CsrfToken: {0}", token));
                     return token;
                 }
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog(string.Format("[X][帐号] 异常: {0}", e.Message));
+                nLogger.Error(e, string.Format("[X][帐号] 异常: {0}", e.Message));
             }
             return 0;
         }
@@ -308,13 +304,13 @@ namespace CQPSharpService.Core {
         public static string GetCQAppFolder() {
             try {
                 lock (_syncRoot) {
-                    CQLogger.GetInstance().AddLog(string.Format("[↑][帐号] 取酷Q插件目录"));
+                    nLogger.Info(string.Format("[↑][帐号] 取酷Q插件目录"));
                     var appDir = Encoding.Default.GetString(Convert.FromBase64String(CQUDPProxy.GetInstance().GetStringMessage(string.Format("AppDirectory"))));
-                    CQLogger.GetInstance().AddLog(string.Format("[↓][帐号] 酷Q插件目录: {0}", appDir));
+                    nLogger.Info(string.Format("[↓][帐号] 酷Q插件目录: {0}", appDir));
                     return appDir;
                 }
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog(string.Format("[X][帐号] 异常: {0}", e.Message));
+                nLogger.Error(e, string.Format("[X][帐号] 异常: {0}", e.Message));
             }
             return string.Empty;
         }
@@ -335,7 +331,7 @@ namespace CQPSharpService.Core {
         public static CQGroupMemberInfo GetGroupMemberInfo(long groupId, long qq, bool nocache = false) {
             try {
                 lock (_syncRoot) {
-                    CQLogger.GetInstance().AddLog(string.Format("[↑][帐号] 取群成员信息"));
+                    nLogger.Info(string.Format("[↑][帐号] 取群成员信息"));
                     var data = CQUDPProxy.GetInstance().GetStringMessage(
                         string.Format("GroupMemberInfo {0} {1} {2}", groupId, qq, nocache ? 0 : 1)
                     );
@@ -443,11 +439,11 @@ namespace CQPSharpService.Core {
                     Array.Reverse(titleExpireBytes);
                     info.CanModifyInGroupName = BitConverter.ToInt32(modifyCardBytes, 0) == 1;
 
-                    CQLogger.GetInstance().AddLog(string.Format("[↓][帐号] 群成员: 昵称：{0} QQ：{1} 所属群：", info.NickName, info.Number, info.GroupId));
+                    nLogger.Info(string.Format("[↓][帐号] 群成员: 昵称：{0} QQ：{1} 所属群：", info.NickName, info.Number, info.GroupId));
                     return info;
                 }
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog(string.Format("[X][帐号] 异常: {0}", e.Message));
+                nLogger.Error(e, string.Format("[X][帐号] 异常: {0}", e.Message));
                 return null;
             }
         }
@@ -457,7 +453,7 @@ namespace CQPSharpService.Core {
                 List<CQGroupMemberInfo> lst = null;
                 try {
                     lst = new List<CQGroupMemberInfo>();
-                    CQLogger.GetInstance().AddLog(string.Format("[↑][帐号] 取群成员列表"));
+                    nLogger.Info(string.Format("[↑][帐号] 取群成员列表"));
                     var cachePath = Encoding.Default.GetString(
                         Convert.FromBase64String(CQUDPProxy.GetInstance().GetStringMessage(string.Format("GroupMemberList {0}", groupId))));
                     var data = File.ReadAllText(cachePath);
@@ -465,10 +461,10 @@ namespace CQPSharpService.Core {
                     if (string.IsNullOrEmpty(data) || !ConvertStrToGroupMembersList(data, ref lst)) {
                         return null;
                     }
-                    CQLogger.GetInstance().AddLog(string.Format("[↓][帐号] 总共获得群员数：{0}", lst.Count));
+                    nLogger.Info(string.Format("[↓][帐号] 总共获得群员数：{0}", lst.Count));
                     return lst;
                 } catch (Exception e) {
-                    CQLogger.GetInstance().AddLog(string.Format("[X][帐号] 异常: {0}", e.Message));
+                    nLogger.Error(e, string.Format("[X][帐号] 异常: {0}", e.Message));
                     return null;
                 }
             }

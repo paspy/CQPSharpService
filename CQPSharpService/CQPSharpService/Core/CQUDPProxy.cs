@@ -20,6 +20,8 @@ namespace CQPSharpService.Core {
         private string _strMessage = string.Empty;
         private string _keepConnectionMsg = string.Empty;
 
+        private NLog.Logger nLogger = NLog.LogManager.GetCurrentClassLogger();
+
         //private ThreadCallBackDelegate _callback;
         private EndPoint LocalPoint;
         private EndPoint ServerPoint;
@@ -127,7 +129,7 @@ namespace CQPSharpService.Core {
                 FramePayloadSize = int.Parse(lst[3]);
                 FrameSize = int.Parse(lst[4]);
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog("Exception: " + _keepConnectionMsg + " " + e.Message);
+                nLogger.Error(e, "Exception: " + _keepConnectionMsg + " " + e.Message);
             }
             keepConnectTimer.Change(ClientTimeout * 1000, Timeout.Infinite);
         }
@@ -146,7 +148,7 @@ namespace CQPSharpService.Core {
                 _strMessage = string.Empty;
                 return strArray[1];
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog("Exception: " + _strMessage + " " + e.Message);
+                nLogger.Error(e, "Exception: " + _strMessage + " " + e.Message);
                 return string.Empty;
             }
         }

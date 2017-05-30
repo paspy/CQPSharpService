@@ -14,6 +14,8 @@ using CQPSharpService.Core;
 namespace CQPSharpService.Utility {
 
     public static class HttpHelper {
+
+
         /// <summary>向HTTP服务器发送Get请求。</summary>
         /// <param name="url">请求地址。</param>
         /// <param name="referer">参照页。</param>
@@ -166,7 +168,8 @@ namespace CQPSharpService.Utility {
                 str = HttpHelper.GetResponseString(responese, encoding);
                 cookies = responese.Cookies;
             } catch (Exception e) {
-                CQLogger.GetInstance().AddLog(e.Message);
+                var log = NLog.LogManager.GetCurrentClassLogger();
+                log.Error(e, e.Message);
             }
             return str;
         }
