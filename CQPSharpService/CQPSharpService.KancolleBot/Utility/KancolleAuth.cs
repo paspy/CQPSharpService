@@ -14,13 +14,19 @@ using Newtonsoft.Json.Linq;
 using CQPSharpService.Utility;
 
 namespace CQPSharpService.KancolleBot.Utility {
-    internal sealed class KancolleAuth {
+
+    public sealed class KancolleAccessInfo {
+        public int ServerId { get; set; }
+        public string ServerAddress { get; set; }
+        public string Token { get; set; }
+    }
+
+    public sealed class KancolleAuth {
 
         private HttpClient m_client;
         private string m_loginId;
         private string m_password;
-        private Tuple<int, string, string> m_accessInfo;
-
+        private KancolleAccessInfo m_kcAccessInfo;
         public KancolleAuth(string loginId, string pwd) {
             m_client = new HttpClient(new HttpClientHandler() {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
@@ -33,14 +39,18 @@ namespace CQPSharpService.KancolleBot.Utility {
             m_password = pwd;
         }
 
-        public Tuple<int, string, string> GetKancolleAccessInfo(bool forceUpdate = false) {
-            if (m_accessInfo != null && !forceUpdate) return m_accessInfo;
+        public KancolleAccessInfo GetKancolleAccessInfo(bool forceUpdate = false) {
+            if (m_kcAccessInfo != null && !forceUpdate) return m_kcAccessInfo;
             var dmmTokens = GetDMMTokensForAjaxAsync();
             var ajaxTokens = GetAjaxTokensAsync(dmmTokens.Item1, dmmTokens.Item2);
             var osApiUrl = GetOSAPIUrlAsync(ajaxTokens.Item1, ajaxTokens.Item2, ajaxTokens.Item3);
             var serverToken = GetKancolleServerTokenAsync(osApiUrl);
-            m_accessInfo = new Tuple<int, string, string>(serverToken.Item1, serverToken.Item2, serverToken.Item3);
-            return m_accessInfo;
+            m_kcAccessInfo = new KancolleAccessInfo() {
+                ServerId = serverToken.Item1,
+                ServerAddress = serverToken.Item2,
+                Token = serverToken.Item3
+            };
+            return m_kcAccessInfo;
         }
 
         private Tuple<string, string> GetDMMTokensForAjaxAsync() {

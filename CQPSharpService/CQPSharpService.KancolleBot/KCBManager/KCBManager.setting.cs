@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CQPSharpService.KancolleBot.Utility;
 using NLog;
 
 namespace CQPSharpService.KancolleBot {
@@ -28,6 +29,8 @@ namespace CQPSharpService.KancolleBot {
         public string TwitterAccessToken => m_config.TwitterAccessToken;
         public string TwitterAccessTokenSecret => m_config.TwitterAccessTokenSecret;
         public string WhatAnimeToken => m_config.WhatAnimeToken;
+
+        public static KancolleAuth KCAuth { get; private set; }
 
         public static readonly List<string> SERVER_ADDRESS = new List<string>() {
                "203.104.209.71"  , // 横須賀鎮守府   

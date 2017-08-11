@@ -50,6 +50,7 @@ namespace CQPSharpService.KancolleBot {
                     }
                 }
 
+                KCAuth = new KancolleAuth(m_config.DMMLoginId, m_config.DMMLoginPwd);
                 m_cacheTimer = new Timer(UpdateGroupInfo, null, 1000, Timeout.Infinite);
 
             } catch (Exception e) {

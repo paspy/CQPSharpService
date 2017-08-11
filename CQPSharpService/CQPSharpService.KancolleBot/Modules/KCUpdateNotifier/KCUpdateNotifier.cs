@@ -21,6 +21,7 @@ namespace CQPSharpService.KancolleBot.Modules {
         private bool m_bIsRankingBoardRuning;
         private bool m_bIsSlotItemRuning;
         private int m_iMaxSlotItem = 300;
+        private KancolleAccessInfo m_kcAccessInfo;
 
         public KCUpdateNotifier() {
             Directory.CreateDirectory(RANKING_BOARD_PATH);
@@ -28,13 +29,17 @@ namespace CQPSharpService.KancolleBot.Modules {
             m_bIsRankingBoardRuning = false;
             m_bIsSlotItemRuning = false;
             StartCheck();
+            Task.Run(() => {
+                m_kcAccessInfo = KCBManager.KCAuth.GetKancolleAccessInfo();
+                KCBManager.nLog.Info("[{0}, {1}, {2}]", m_kcAccessInfo.ServerId, m_kcAccessInfo.ServerAddress, m_kcAccessInfo.Token);
+            });
         }
 
         public void StartCheck() {
             m_bIsRankingBoardRuning = true;
             m_bIsSlotItemRuning = true;
-            m_tMonthlyRankingTimer = new Timer(CheckRankingBoards, null, 5000, Timeout.Infinite);
-            m_tSlotItemTimer = new Timer(CheckSlotItems, null, 5000, Timeout.Infinite);
+            m_tMonthlyRankingTimer = new Timer(CheckRankingBoards, null, 3000, Timeout.Infinite);
+            m_tSlotItemTimer = new Timer(CheckSlotItems, null, 3000, Timeout.Infinite);
         }
 
         public void StopCheck() {
